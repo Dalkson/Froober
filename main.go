@@ -2,6 +2,7 @@ package main
 
 import (
 	"log"
+	"regexp"
 	"strings"
 	"time"
 
@@ -25,7 +26,7 @@ func clipboardCheck() {
 	}
 
 	// If the text does not contain "http" or contains "http://froob.org/" already, return.
-	if !containsHTTP(text) || containsFroobURL(text) {
+	if !containsURL(text) || containsFroobURL(text) {
 		return
 	}
 
@@ -34,8 +35,9 @@ func clipboardCheck() {
 }
 
 // containsHTTP returns true if the given text contains the string "http", false otherwise.
-func containsHTTP(text string) bool {
-	return strings.Contains(text, "http")
+func containsURL(text string) bool {
+	re := regexp.MustCompile(`(https?://)[^\s]+`)
+	return re.MatchString(text)
 }
 
 // containsFroobURL returns true if the given text contains the string "http://froob.org/", false otherwise.
