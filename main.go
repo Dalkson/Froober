@@ -44,12 +44,9 @@ func clipboardCheck() {
 			// Check if it starts with "https://" or "http://".
 			// If it does, append "http://froob.org/" to newCopy.
 			// If not, append the word as is.
-			switch {
-			case strings.HasPrefix(s, "https://"):
+			if strings.HasPrefix(s, "https://") || strings.HasPrefix(s, "http://") {
 				newCopy.WriteString("http://froob.org/")
-			case strings.HasPrefix(s, "http://"):
-				newCopy.WriteString("http://froob.org/")
-			default:
+			} else {
 				newCopy.WriteString(s)
 			}
 		} else {
@@ -57,12 +54,9 @@ func clipboardCheck() {
 			// Check if it starts with "https://" or "http://".
 			// If it does, append " http://froob.org/" to newCopy.
 			// If not, append " " + the word.
-			switch {
-			case strings.HasPrefix(s, "https://"):
+			if strings.HasPrefix(s, "https://") || strings.HasPrefix(s, "http://") {
 				newCopy.WriteString(" http://froob.org/")
-			case strings.HasPrefix(s, "http://"):
-				newCopy.WriteString(" http://froob.org/")
-			default:
+			} else {
 				newCopy.WriteString(" " + s)
 			}
 		}
