@@ -30,8 +30,7 @@ func clipboardCheck() {
 		return
 	}
 
-	modifiedText := modifyText(text)
-	glippy.Set(modifiedText)
+	modifyText(text)
 }
 
 // containsHTTP returns true if the given text contains the string "http", false otherwise.
@@ -47,32 +46,15 @@ func containsFroobURL(text string) bool {
 
 // modifyText returns a modified version of the given text in which each word that starts with "https://" or "http://"
 // is prepended with "http://froob.org/".
-func modifyText(text string) string {
-	// Initialize a new strings.Builder object.
-	var newCopy strings.Builder
-	// Split the text into words.
-	words := strings.Fields(text)
-	// Iterate over the words.
-	for i, s := range words {
-		// If it is the first word:
-		if i == 0 {
-			newCopy.WriteString(froob(s))
-		} else {
-			// If it is not the first word:
-			newCopy.WriteString(" " + froob(s))
-		}
+func modifyText(text string) {
+	re := regexp.MustCompile(`(https?://)[^\s]+`)
+	// Replace all occurrences of hexadecimal string in clipboard text with address string
+	modifiedText := re.ReplaceAllLiteralString(text, "http://froob.org/")
+	// Set modified clipboard text
+	err := glippy.Set(modifiedText)
+	if err != nil {
+		// If there is an error setting the clipboard text, log the error and return
+		log.Println(err)
+		return
 	}
-	return newCopy.String()
-}
-
-// prependFroob returns the given word with "http://froob.org/" prepended to it if the word starts with "https://" or "http://".
-// Otherwise, it returns the word as is.
-func froob(word string) string {
-	// Check if the word starts with "https://" or "http://".
-	// If it does, return "http://froob.org/" + the word.
-	// If not, return the word as is.
-	if strings.HasPrefix(word, "https://") || strings.HasPrefix(word, "http://") {
-		return "http://froob.org/"
-	}
-	return word
 }
